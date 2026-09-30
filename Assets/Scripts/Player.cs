@@ -41,7 +41,6 @@ public class Player : MonoBehaviour
 
         if (IsOnFloor()) // If the player is on the floor
         {
-
             if (rb.linearVelocityY < 0.0f) // Set vertical velocity to 0 if on the ground
             {
                 rb.linearVelocityY = 0.0f;
@@ -64,11 +63,13 @@ public class Player : MonoBehaviour
     {
 
         // Raycast downward to check for ground
-        RaycastHit2D cast = Physics2D.Raycast(
-            transform.position,
+        RaycastHit2D cast = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0.0f,
             Vector2.down,
-            0.52f,
-            64 // 64 (2^6) should detect just the ground layer (layer 6)
+            0.025f,
+            64
         );
 
         if (cast.collider != null)

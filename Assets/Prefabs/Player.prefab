@@ -249,7 +249,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: cae983ae05b6291459b5792165d96c9c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -318,3 +318,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc279770eb341d84f9bd0a9d939c8751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  gravity: 10
