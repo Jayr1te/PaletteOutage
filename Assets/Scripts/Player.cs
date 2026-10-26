@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     private BoxCollider2D boxCollider;
     private Animator animator;
 
+    private float direction = 1.0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,15 +33,19 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow)) // Left Arrow to move left
         {
             rb.linearVelocityX = -6.0f;
+            direction = -1.0f;
         } 
         else if (Input.GetKey(KeyCode.RightArrow)) // Right Arrow to move right
         {
             rb.linearVelocityX = 6.0f;
+            direction = 1.0f;
         }
         else // Don't move horzontally at all if nothing is pressed
         {
             rb.linearVelocityX = 0;
         }
+
+        animator.SetFloat("Direction",direction);
 
         if (Input.GetKeyDown(KeyCode.X))
         {
