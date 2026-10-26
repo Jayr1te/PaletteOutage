@@ -45,9 +45,7 @@ public class Player : MonoBehaviour
             rb.linearVelocityX = 0;
         }
 
-        animator.SetFloat("Direction",direction);
-
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X)) // Attack
         {
             animator.SetBool("StartAttack",true);
         }
@@ -74,6 +72,10 @@ public class Player : MonoBehaviour
             animator.SetBool("OnFloor",false);
             rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
         }
+
+        transform.localScale = new Vector3(direction,1.0f,1.0f); // If moving left, then the player is flipped horizontally
+        animator.SetFloat("xVel",rb.linearVelocityX);
+        animator.SetFloat("yVel",rb.linearVelocityY);
 
     }
 

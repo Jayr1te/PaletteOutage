@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8391950584542251756}
   - component: {fileID: 9123588792865820037}
   - component: {fileID: 6502707500849947125}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: PlayerFireAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 1855591407206792849}
   - component: {fileID: 6277211172483228515}
   - component: {fileID: 4158838526944575306}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -290,9 +290,9 @@ GameObject:
   - component: {fileID: 6898075797494044921}
   - component: {fileID: 168415517415782474}
   - component: {fileID: 185873723992998425}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -494,9 +494,9 @@ GameObject:
   - component: {fileID: 6590333909433656128}
   - component: {fileID: 8895546788618284418}
   - component: {fileID: 8929000940702173689}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: AirAttack
-  m_TagString: Untagged
+  m_TagString: PlayerFireAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -592,7 +592,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
