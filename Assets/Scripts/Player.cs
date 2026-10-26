@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
+    private Animator animator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
         // This is to make code cleaner hopefully
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -28,19 +30,29 @@ public class Player : MonoBehaviour
         // Handle horzontal movement
         if (Input.GetKey(KeyCode.LeftArrow)) // Left Arrow to move left
         {
-            rb.linearVelocityX = -4.0f;
+            rb.linearVelocityX = -6.0f;
         } 
         else if (Input.GetKey(KeyCode.RightArrow)) // Right Arrow to move right
         {
-            rb.linearVelocityX = 4.0f;
+            rb.linearVelocityX = 6.0f;
         }
         else // Don't move horzontally at all if nothing is pressed
         {
             rb.linearVelocityX = 0;
         }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            animator.SetBool("StartAttack",true);
+        }
+        else
+        {
+            animator.SetBool("StartAttack",false);
+        }
+
         if (IsOnFloor()) // If the player is on the floor
         {
+            animator.SetBool("OnFloor",true);
             if (rb.linearVelocityY < 0.0f) // Set vertical velocity to 0 if on the ground
             {
                 rb.linearVelocityY = 0.0f;
@@ -53,6 +65,7 @@ public class Player : MonoBehaviour
 
         } else // If the player is not on the floor
         {
+            animator.SetBool("OnFloor",false);
             rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
         }
 
