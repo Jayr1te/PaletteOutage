@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerFireAttack
   - FireBreakable
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,9 +14,9 @@ TagManager:
   - Player
   - Water
   - UI
+  - Enemy
   - Ground
-  - 
-  - 
+  - Aggro
   - 
   - 
   - 
