@@ -620,6 +620,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &537884148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8326641513954632462, guid: 56ee5f32cb9c73c42bc3e3d41d7485b1, type: 3}
+  m_PrefabInstance: {fileID: 1489894244}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &598514285
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,7 +662,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: cae983ae05b6291459b5792165d96c9c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -827,11 +832,12 @@ MonoBehaviour:
   aggro: 0
   health: 0
   damage: 0
-  speed: 0
+  speed: 2
   direction: {x: 0, y: 0}
   rb: {fileID: 0}
   sprite: {fileID: 0}
   animator: {fileID: 0}
+  player: {fileID: 537884148}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

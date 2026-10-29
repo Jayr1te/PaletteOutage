@@ -2,13 +2,10 @@ using UnityEngine;
 
 public class RoboGoombaBehaviour : EnemyBase
 {
+    public GameObject player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        aggro = false;
-        health = 1;
-        damage = 1;
-        speed = 20;
         direction = Vector2.right;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -17,20 +14,51 @@ public class RoboGoombaBehaviour : EnemyBase
     // Update is called once per frame
     void Update()
     {
-        
+        if (aggro)
+        {
+            direction = Vector2.Normalize(new Vector2(player.transform.position.x - transform.position.x, 0.0f));
+        } else
+        {
+            if (rb.linearVelocity == Vector2.zero)
+            {
+                direction.x = -direction.x;
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (rb.linearVelocityY == 0)
+        {
+            rb.linearVelocityX = speed * direction.x;
+        } else
+        {
+            rb.linearVelocityX = 0;
+        }
+    }
+
+    public override void Die()
+    {
+        Destroy(gameObject);
     }
 
     public override void AggroResponse()
     {
-        Debug.Log("aggro enter");
         animator.Play("RoboGoombaAggroed");
         aggro = true;
     }
 
     public override void AggroLeave()
     {
-        Debug.Log("aggro leave");
         animator.Play("RoboGoombaPassive");
         aggro = false;
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "PlayerFireAttack")
+        {
+            Die();
+        }
     }
 }
