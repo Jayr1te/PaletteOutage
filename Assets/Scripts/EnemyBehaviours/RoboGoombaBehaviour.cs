@@ -56,6 +56,7 @@ public class RoboGoombaBehaviour : EnemyBase
 
     public void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("trigger");
         if (other.tag == "PlayerFireAttack")
         {
             Die();

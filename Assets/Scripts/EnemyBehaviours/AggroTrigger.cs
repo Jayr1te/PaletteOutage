@@ -16,11 +16,17 @@ public class AggroTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        SendMessageUpwards("AggroResponse");
+        if (other.tag == "Player")
+        {
+            SendMessageUpwards("AggroResponse");
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        SendMessageUpwards("AggroLeave");
+        if (other.tag == "Player")
+        {
+            SendMessageUpwards("AggroLeave");
+        }
     }
 }
