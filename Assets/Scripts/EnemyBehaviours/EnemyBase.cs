@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
 
+    // sets references to components common to every enemy
     public virtual void Startup()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -18,6 +19,7 @@ public class EnemyBase : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    // deals damage to an enemy and kills it if health is low enough
     public virtual void Die(int dmg)
     {
         health -= dmg;
@@ -28,13 +30,36 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    // defines what to do in response to player entering aggro range
     public virtual void AggroResponse()
     {
-        
+        aggro = true;
     }
 
+    // defines what to do in response to player leaving aggro range
     public virtual void AggroLeave()
     {
+        aggro = false;
+    }
 
+    // a function (should probably be defined elsewhere) to check if two values are
+    // "close enough" to count as equivalent
+    public bool CloseEnough(float a, float b)
+    {
+        if (a >= b - 0.05 && a <= b + 0.05)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // how to respond to various triggers, such as being attacked
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "PlayerFireAttack")
+        {
+            Die(1);
+        }
     }
 }

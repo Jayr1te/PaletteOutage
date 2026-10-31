@@ -38,21 +38,13 @@ public class RoboGoombaBehaviour : EnemyBase
 
     public override void AggroResponse()
     {
+        base.AggroResponse();
         animator.Play("RoboGoombaAggroed");
-        aggro = true;
     }
 
     public override void AggroLeave()
     {
+        base.AggroLeave();
         animator.Play("RoboGoombaPassive");
-        aggro = false;
-    }
-
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "PlayerFireAttack")
-        {
-            Die(1);
-        }
     }
 }
