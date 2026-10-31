@@ -11,9 +11,21 @@ public class EnemyBase : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
 
-    public virtual void Die()
+    public virtual void Startup()
     {
+        rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+    }
 
+    public virtual void Die(int dmg)
+    {
+        health -= dmg;
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public virtual void AggroResponse()

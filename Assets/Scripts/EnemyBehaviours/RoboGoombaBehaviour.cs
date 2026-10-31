@@ -6,9 +6,8 @@ public class RoboGoombaBehaviour : EnemyBase
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Startup();
         direction = Vector2.right;
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -37,11 +36,6 @@ public class RoboGoombaBehaviour : EnemyBase
         }
     }
 
-    public override void Die()
-    {
-        Destroy(gameObject);
-    }
-
     public override void AggroResponse()
     {
         animator.Play("RoboGoombaAggroed");
@@ -56,10 +50,9 @@ public class RoboGoombaBehaviour : EnemyBase
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("trigger");
         if (other.tag == "PlayerFireAttack")
         {
-            Die();
+            Die(1);
         }
     }
 }
