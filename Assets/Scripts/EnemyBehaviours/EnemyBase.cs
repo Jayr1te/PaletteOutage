@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
 {
-    public bool aggro = false;   // whether or not the enemy is aggroed
     public int health;   // how many hits it takes to kill the enemy
     public int damage;   // how much damage the enemy deals on hit
     public int speed;
-    public Vector2 direction;   // direction vector for movement
-    public Rigidbody2D rb;
-    public SpriteRenderer sprite;
-    public Animator animator;
+    public GameObject player;   // reference to the player character
+
+    protected bool aggro = false;   // whether or not the enemy is aggroed
+    protected Vector2 direction;   // direction vector for movement
+    protected Rigidbody2D rb;
+    protected SpriteRenderer sprite;
+    protected Animator animator;
 
     // sets references to components common to every enemy
     public virtual void Startup()
@@ -17,6 +19,12 @@ public class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+    }
+
+    // defines how to attack
+    public virtual void Attack()
+    {
+
     }
 
     // deals damage to an enemy and kills it if health is low enough
