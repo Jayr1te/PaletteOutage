@@ -5,7 +5,6 @@ public class EnemyBase : MonoBehaviour
     public int health;   // how many hits it takes to kill the enemy
     public int damage;   // how much damage the enemy deals on hit
     public int speed;
-    public GameObject player;   // reference to the player character
 
     protected bool aggro = false;   // whether or not the enemy is aggroed
     protected Vector2 direction;   // direction vector for movement
@@ -14,7 +13,7 @@ public class EnemyBase : MonoBehaviour
     protected Animator animator;
 
     // sets references to components common to every enemy
-    public virtual void Startup()
+    protected virtual void Startup()
     {
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
@@ -22,13 +21,13 @@ public class EnemyBase : MonoBehaviour
     }
 
     // defines how to attack
-    public virtual void Attack()
+    protected virtual void Attack()
     {
 
     }
 
     // deals damage to an enemy and kills it if health is low enough
-    public virtual void Die(int dmg)
+    protected virtual void Die(int dmg)
     {
         health -= dmg;
 
@@ -39,13 +38,13 @@ public class EnemyBase : MonoBehaviour
     }
 
     // defines what to do in response to player entering aggro range
-    public virtual void AggroResponse()
+    protected virtual void AggroResponse()
     {
         aggro = true;
     }
 
     // defines what to do in response to player leaving aggro range
-    public virtual void AggroLeave()
+    protected virtual void AggroLeave()
     {
         aggro = false;
     }

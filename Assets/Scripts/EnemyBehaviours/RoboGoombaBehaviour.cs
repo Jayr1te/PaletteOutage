@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RoboGoombaBehaviour : EnemyBase
 {
+    public GameObject player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,13 +36,13 @@ public class RoboGoombaBehaviour : EnemyBase
         }
     }
 
-    public override void AggroResponse()
+    protected override void AggroResponse()
     {
         base.AggroResponse();
         animator.Play("RoboGoombaAggroed");
     }
 
-    public override void AggroLeave()
+    protected override void AggroLeave()
     {
         base.AggroLeave();
         animator.Play("RoboGoombaPassive");
