@@ -1,95 +1,112 @@
-using System;
-using System.Timers;
+using System.Collections;
 using UnityEngine;
 
-public interface IRoboHornet
+public class RoboHornet : EnemyBase
 {
-    void AggroLeave();
-    void AggroResponse();
-}
+    private BoxCollider2D hitbox;
 
-public class RoboHornet : EnemyBase, IRoboHornet
-{
-    private Timer fireTimer;
-    public GameObject spawnBullet;
+    [SerializeField]
+    private GameObject spawnBullet;
+
     public GameObject[] pathMarkers;
     public int lastMarker = 0;
     public float attackInterval;
+    public float attackRange;
+    public GameObject player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Startup();
+        hitbox = GetComponent<BoxCollider2D>();
 
         direction = Vector2.Normalize(pathMarkers[lastMarker].transform.position - transform.position);
-        rb.linearVelocity = direction * speed;
 
-        fireTimer = new Timer(attackInterval * 1000);
-        fireTimer.Elapsed += OnTimedAttack;
+        StartCoroutine(AttackTimer());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (rb.linearVelocityX < 0)
+        if (rb.linearVelocityX < 0 && sprite.flipX)
         {
             sprite.flipX = false;
+            hitbox.offset = new Vector2(-hitbox.offset.x, hitbox.offset.y);
         }
-        else if (rb.linearVelocityX > 0)
+        else if (rb.linearVelocityX > 0 && !sprite.flipX)
         {
             sprite.flipX = true;
+            hitbox.offset = new Vector2(-hitbox.offset.x, hitbox.offset.y);
+        }
+
+        if (aggro)
+        {
+            float distance = Vector2.Distance(player.transform.position, transform.position);
+
+            if (CloseEnough(distance, attackRange))
+            {
+                direction = Vector2.zero;
+            } else if (distance > attackRange + 0.05)
+            {
+                direction = Vector2.Normalize(player.transform.position - transform.position);
+            } else
+            {
+                direction = Vector2.Normalize(transform.position - player.transform.position);
+            }
+        } else
+        {
+            if (CloseEnough(transform.position.x, pathMarkers[lastMarker].transform.position.x) && CloseEnough(transform.position.y, pathMarkers[lastMarker].transform.position.y))
+            {
+                if (lastMarker == pathMarkers.Length - 1)
+                {
+                    lastMarker = 0;
+                } else
+                {
+                    ++lastMarker;
+                }
+                direction = Vector2.Normalize(pathMarkers[lastMarker].transform.position - transform.position);
+            }
+            
+            if (!((rb.linearVelocityX == 0 || rb.linearVelocityY == 0) && !(rb.linearVelocityX == 0 && rb.linearVelocityY == 0)))
+            {
+                direction = Vector2.Normalize(pathMarkers[lastMarker].transform.position - transform.position);
+            } else
+            {
+                // direction = Vector2.Normalize(rb.linearVelocity);
+            }
         }
     }
 
     void FixedUpdate()
     {
-        if (CloseEnough(transform.position.x, pathMarkers[lastMarker].transform.position.x) && CloseEnough(transform.position.y, pathMarkers[lastMarker].transform.position.y))
+        rb.linearVelocity = direction * speed;
+    }
+
+    protected override void AggroResponse()
+    {
+        base.AggroResponse();
+        animator.Play("RoboHornetFlyingAggro");
+    }
+
+    protected override void AggroLeave()
+    {
+        base.AggroLeave();
+        animator.Play("RoboHornetFlyingPassive");
+        direction = Vector2.Normalize(pathMarkers[lastMarker].transform.position - transform.position);
+    }
+
+    private IEnumerator AttackTimer()
+    {
+        while (true)
         {
-            if (lastMarker == pathMarkers.Length - 1)
-            {
-                lastMarker = 0;
-            }
-            else
-            {
-                ++lastMarker;
-            }
-            direction = Vector2.Normalize(pathMarkers[lastMarker].transform.position - transform.position);
-            rb.linearVelocity = direction * speed;
+            yield return new WaitForSeconds(attackInterval);
+            if (aggro) Attack();
         }
     }
 
-    public override void AggroResponse()
-    {
-        base.AggroResponse();
-        fireTimer.Start();
-    }
-
-    public override void AggroLeave()
-    {
-        base.AggroLeave();
-        fireTimer.Stop();
-    }
-
-    public override void Attack()
+    protected override void Attack()
     {
         base.Attack();
-        GameObject bullet = Instantiate(spawnBullet);
-        // bullet.target = player;
-    }
-
-    // this is here because the timer needs a method with certain parameters to be subscribed to its event
-    private void OnTimedAttack(object source, ElapsedEventArgs e)
-    {
-        Attack();
-    }
-
-    // these are here because of the way System.Timers.Timer works
-    void OnDestroy()
-    {
-        fireTimer.Dispose();
-    }
-
-    void OnApplicationQuit()
-    {
-        fireTimer.Dispose();
+        GameObject bullet = Instantiate(spawnBullet, transform.position, Quaternion.identity);
+        bullet.SendMessage("TargetLocked", player);
     }
 }
