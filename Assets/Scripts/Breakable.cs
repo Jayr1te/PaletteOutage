@@ -28,9 +28,6 @@ public class Breakable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        print("a");
-
         if (other.CompareTag("PlayerFireAttack"))
         {
             HP -= 1.0f;
