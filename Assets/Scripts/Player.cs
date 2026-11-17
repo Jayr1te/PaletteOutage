@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,13 +6,19 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 
-    public float gravity = 7.5f;
+    public float gravity = 10.0f;
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private Animator animator;
 
     private float direction = 1.0f;
+    private float maxFallSpeed = -20.0f;
+    private int state = 0; // 0 = grounded, 1 = airborne
+
+    private InputAction moveAction;
+    private InputAction jumpAction;
+    private InputAction attackAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,56 +28,140 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
+
+        moveAction = InputSystem.actions.FindAction("Move");
+        jumpAction = InputSystem.actions.FindAction("Jump");
+        attackAction = InputSystem.actions.FindAction("Attack");
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Using the old input system for right now as it is faster to implement for testing
-        // Will hopefully be replaced by a better input system once stuff is further along
+        animator.SetBool("StartAttack",false);
 
-        // Handle horzontal movement
-        if (Input.GetKey(KeyCode.LeftArrow)) // Left Arrow to move left
+        switch (state)
         {
-            rb.linearVelocityX = -6.0f;
-            direction = -1.0f;
-        } 
-        else if (Input.GetKey(KeyCode.RightArrow)) // Right Arrow to move right
-        {
-            rb.linearVelocityX = 6.0f;
-            direction = 1.0f;
-        }
-        else // Don't move horzontally at all if nothing is pressed
-        {
-            rb.linearVelocityX = 0;
-        }
+            case 0: // grounded
 
-        if (Input.GetKeyDown(KeyCode.X)) // Attack
-        {
-            animator.SetBool("StartAttack",true);
-        }
-        else
-        {
-            animator.SetBool("StartAttack",false);
-        }
+                animator.SetBool("OnFloor",true);
 
-        if (IsOnFloor()) // If the player is on the floor
-        {
-            animator.SetBool("OnFloor",true);
-            if (rb.linearVelocityY < 0.0f) // Set vertical velocity to 0 if on the ground
-            {
                 rb.linearVelocityY = 0.0f;
-            }
+                rb.linearVelocityX = moveAction.ReadValue<float>() * 6.0f;
 
-            if (Input.GetKeyDown(KeyCode.Z)) // Press Z to Jump
-            {
-                rb.linearVelocityY += 7.5f;
-            }
+                var snap = snapFloor();
 
-        } else // If the player is not on the floor
-        {
-            animator.SetBool("OnFloor",false);
-            rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
+                if (moveAction.ReadValue<float>() != 0.0)
+                {
+                    direction = Mathf.Sign(moveAction.ReadValue<float>());
+                }
+
+                if (!snap)
+                {
+                    state = 1;
+                    break;
+                }
+
+                if (attackAction.WasPressedThisFrame())
+                {
+                    animator.SetBool("StartAttack",true);
+                }
+
+                if (jumpAction.WasPressedThisFrame())
+                {
+                    rb.linearVelocityY += 7.5f;
+                    state = 1;
+                    break;
+                }
+
+                
+                break;
+            
+            case 1: // airborne
+
+                animator.SetBool("OnFloor",false);
+                maxFallSpeed = -20.0f;
+                rb.linearVelocityX = moveAction.ReadValue<float>() * 6.0f;
+                rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
+
+                if (moveAction.ReadValue<float>() != 0.0)
+                {
+                    direction = Mathf.Sign(moveAction.ReadValue<float>());
+                }
+
+                if (IsOnFloor() && rb.linearVelocityY <= 0)
+                {
+                    state = 0;
+                }
+
+                if (rb.linearVelocityY < maxFallSpeed)
+                {
+                    rb.linearVelocityY = maxFallSpeed;
+                }
+
+                if (attackAction.WasPressedThisFrame())
+                {
+                    animator.SetBool("StartAttack",true);
+                }
+
+                if (jumpAction.WasPressedThisFrame())
+                {
+                    rb.linearVelocityY = 5.0f;
+                    state = 2;
+                    break;
+                }
+
+                break;
+            
+            case 2: // gliding
+
+                animator.SetBool("OnFloor",false);
+                maxFallSpeed = -2.0f;
+                rb.linearVelocityX += 8.0f * Time.deltaTime * direction;
+                rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
+
+                if (rb.linearVelocityX > 8.0f)
+                {
+                    rb.linearVelocityX = 8.0f;
+                }
+
+                if (rb.linearVelocityX < -8.0f)
+                {
+                    rb.linearVelocityX = -8.0f;
+                }
+
+                if (rb.linearVelocityX < 0.0f && direction == 1)
+                {
+                    rb.linearVelocityX += 8.0f * Time.deltaTime * direction;
+                }
+
+                if (rb.linearVelocityX > 0.0f && direction == -1)
+                {
+                    rb.linearVelocityX += 8.0f * Time.deltaTime * direction;
+                }
+
+                if (moveAction.ReadValue<float>() != 0.0)
+                {
+                    direction = Mathf.Sign(moveAction.ReadValue<float>());
+                }
+
+                if (IsOnFloor() && rb.linearVelocityY <= 0)
+                {
+                    state = 0;
+                }
+
+                if (rb.linearVelocityY < maxFallSpeed)
+                {
+                    rb.linearVelocityY = maxFallSpeed;
+                }
+
+                if (attackAction.WasPressedThisFrame())
+                {
+                    animator.SetBool("StartAttack",true);
+                    state = 1;
+                }
+
+                break;
+
         }
 
         transform.localScale = new Vector3(direction,1.0f,1.0f); // If moving left, then the player is flipped horizontally
@@ -89,7 +180,7 @@ public class Player : MonoBehaviour
             boxCollider.bounds.size,
             0.0f,
             Vector2.down,
-            0.025f,
+            0.15f,
             64
         );
 
@@ -99,5 +190,24 @@ public class Player : MonoBehaviour
         }
         return false;
 
+    }
+
+    private bool snapFloor()
+    {
+        RaycastHit2D cast = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0.0f,
+            Vector2.down,
+            0.15f,
+            64
+        );
+
+        if (cast.collider != null)
+        {
+            rb.transform.position = cast.centroid;
+            return true;
+        }
+        return false;
     }
 }
