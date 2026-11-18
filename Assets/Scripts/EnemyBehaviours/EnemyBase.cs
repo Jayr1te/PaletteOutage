@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected SpriteRenderer sprite;
     protected Animator animator;
+    protected GameObject player;
 
     // sets references to components common to every enemy
     protected virtual void Startup()
@@ -18,6 +19,7 @@ public class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        player = GameObject.Find("Player");
     }
 
     // defines how to attack

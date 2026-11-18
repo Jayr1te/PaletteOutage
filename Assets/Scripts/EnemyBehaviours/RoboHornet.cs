@@ -12,7 +12,6 @@ public class RoboHornet : EnemyBase
     public int lastMarker = 0;
     public float attackInterval;
     public float attackRange;
-    public GameObject player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
