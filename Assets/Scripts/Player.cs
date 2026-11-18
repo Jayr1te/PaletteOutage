@@ -110,6 +110,11 @@ public class Player : MonoBehaviour
                     break;
                 }
 
+                if(rb.linearVelocityY < 0 && checkWall())
+                {
+                    state = 3;
+                }
+
                 break;
             
             case 2: // gliding
@@ -160,6 +165,47 @@ public class Player : MonoBehaviour
                     state = 1;
                 }
 
+                if(rb.linearVelocityY < 0 && checkWall())
+                {
+                    state = 3;
+                }
+
+                break;
+            
+            case 3: // wallsliding
+
+                animator.SetBool("OnFloor",false);
+                maxFallSpeed = -2.5f;
+                rb.linearVelocityX = moveAction.ReadValue<float>() * 6.0f;
+                rb.linearVelocityY -= gravity * Time.deltaTime; // Apply gravity
+
+                if (moveAction.ReadValue<float>() != 0.0)
+                {
+                    direction = Mathf.Sign(moveAction.ReadValue<float>());
+                }
+
+                if (rb.linearVelocityY < maxFallSpeed)
+                {
+                    rb.linearVelocityY = maxFallSpeed;
+                }
+
+                if (!checkWall())
+                {
+                    state = 1;
+                }
+
+                if (IsOnFloor() && rb.linearVelocityY <= 0)
+                {
+                    state = 0;
+                }
+
+                if (jumpAction.WasPressedThisFrame())
+                {
+                    rb.linearVelocityY = 7.5f;
+                    state = 1;
+                    break;
+                }
+
                 break;
 
         }
@@ -168,6 +214,25 @@ public class Player : MonoBehaviour
         animator.SetFloat("xVel",rb.linearVelocityX);
         animator.SetFloat("yVel",rb.linearVelocityY);
 
+    }
+
+    private bool checkWall()
+    {
+        // Raycast downward to check for ground
+        RaycastHit2D cast = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0.0f,
+            Vector2.right * direction,
+            0.05f,
+            64
+        );
+
+        if (cast.collider != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     // Checks if the Player is on the floor
