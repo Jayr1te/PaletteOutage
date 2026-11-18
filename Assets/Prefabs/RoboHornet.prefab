@@ -316,9 +316,8 @@ MonoBehaviour:
   health: 1
   damage: 1
   speed: 2
-  spawnBullet: {fileID: 8522889598549993711, guid: eb304e1a15cdc8541b3972f9fa082eec, type: 3}
+  spawnBullet: {fileID: 4904876306110312983, guid: b1efa2f721d4a15478be3e30fc1f576c, type: 3}
   pathMarkers: []
   lastMarker: 0
   attackInterval: 3
   attackRange: 3.5
-  player: {fileID: 0}
