@@ -53,11 +53,24 @@ public class EnemyBase : MonoBehaviour
 
     // a function (should probably be defined elsewhere) to check if two values are
     // "close enough" to count as equivalent
-    public bool CloseEnough(float a, float b)
+    public bool CloseEnough(float a, float b, float error = 0.05f)
     {
-        if (a >= b - 0.05 && a <= b + 0.05)
+        if (a >= b - error && a <= b + error)
         {
             return true;
+        }
+
+        return false;
+    }
+
+    public bool CloseEnough(Vector2 a, Vector2 b, float error = 0.05f)
+    {
+        if (a.x >= b.x - error && a.x <= b.x + error)
+        {
+            if (a.y >= b.y - error && a.y <= b.y + error)
+            {
+                return true;
+            }
         }
 
         return false;

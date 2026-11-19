@@ -53,7 +53,7 @@ public class RoboHornet : EnemyBase
             }
         } else
         {
-            if (CloseEnough(transform.position.x, pathMarkers[lastMarker].transform.position.x) && CloseEnough(transform.position.y, pathMarkers[lastMarker].transform.position.y))
+            if (CloseEnough(transform.position, pathMarkers[lastMarker].transform.position))
             {
                 if (lastMarker == pathMarkers.Length - 1)
                 {
