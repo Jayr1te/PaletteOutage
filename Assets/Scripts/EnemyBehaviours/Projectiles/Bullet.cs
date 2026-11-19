@@ -14,18 +14,6 @@ public class Bullet : Projectile
         
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Ground" || other.tag == "FireBreakable")
-        {
-            Destroy(gameObject);
-        } else if (other.tag == "Player")
-        {
-            other.SendMessage("ProjectileHit");
-            Destroy(gameObject);
-        }
-    }
-
     public override void TargetLocked(GameObject obj)
     {
         base.TargetLocked(obj);
