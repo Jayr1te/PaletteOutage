@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     private BoxCollider2D boxCollider;
     private Animator animator;
 
+    public AudioSource audioSource;
+    public AudioClip swingSound;
+    public AudioClip jumpSound;
+
     private float direction = 1.0f;
     private float maxFallSpeed = -20.0f;
     private float maxSpeed = 6.0f;
@@ -47,6 +51,7 @@ public class Player : MonoBehaviour
 
                 maxSpeed = 6.0f;
                 animator.SetBool("OnFloor",true);
+                audioSource.PlayOneShot(swingSound);
 
                 rb.linearVelocityY = 0.0f;
 
@@ -109,6 +114,7 @@ public class Player : MonoBehaviour
                 if (jumpAction.WasPressedThisFrame())
                 {
                     rb.linearVelocityY += 10.0f;
+                    audioSource.PlayOneShot(jumpSound);
                     state = 1;
                     break;
                 }
