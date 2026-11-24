@@ -253,7 +253,7 @@ MonoBehaviour:
   health: 1
   damage: 1
   speed: 2
-  spawnBullet: {fileID: 8522889598549993711, guid: eb304e1a15cdc8541b3972f9fa082eec, type: 3}
+  spawnBullet: {fileID: 4904876306110312983, guid: b1efa2f721d4a15478be3e30fc1f576c, type: 3}
   pathMarkers:
   - {fileID: 1903688658}
   - {fileID: 1130327249}
@@ -264,7 +264,6 @@ MonoBehaviour:
   lastMarker: 0
   attackInterval: 3
   attackRange: 3.5
-  player: {fileID: 537884148}
 --- !u!61 &1921638
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3426,6 +3425,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352466903206595020, guid: 54c2ed1732d6cc949bd04292d65755df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773400634460599500, guid: 54c2ed1732d6cc949bd04292d65755df, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773400634460599500, guid: 54c2ed1732d6cc949bd04292d65755df, type: 3}
+      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3773400634460599500, guid: 54c2ed1732d6cc949bd04292d65755df, type: 3}

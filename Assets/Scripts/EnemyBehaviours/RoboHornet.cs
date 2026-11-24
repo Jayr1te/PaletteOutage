@@ -12,7 +12,6 @@ public class RoboHornet : EnemyBase
     public int lastMarker = 0;
     public float attackInterval;
     public float attackRange;
-    public GameObject player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -54,7 +53,7 @@ public class RoboHornet : EnemyBase
             }
         } else
         {
-            if (CloseEnough(transform.position.x, pathMarkers[lastMarker].transform.position.x) && CloseEnough(transform.position.y, pathMarkers[lastMarker].transform.position.y))
+            if (CloseEnough(transform.position, pathMarkers[lastMarker].transform.position))
             {
                 if (lastMarker == pathMarkers.Length - 1)
                 {
